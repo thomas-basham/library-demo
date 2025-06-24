@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Demo</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-rose-100">
+    <header>
+      <h1 class="text-rose-900 text-9xl">Library</h1>
+    </header>
+    <main class="w-[90vw] mx-auto">
+      <section class="flex flex-col [&>input]:border-rose-300 [&>input]:border-4  [&>label]:text-rose-300 text-rose-400 *:my-0.5 text-xl">
+        <label for="search-title">Search by title</label>
+        <input class="" type="text" name="search-title" id="search-title" />
+
+        <label for="search-author">Search by author</label>
+        <input class="" type="text" name="search-author" id="search-author" />
+      </section>
+    </main>
+    <footer></footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
