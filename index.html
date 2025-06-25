@@ -12,17 +12,42 @@
       <h1 class="text-rose-900 text-9xl">Library</h1>
     </header>
     <main class="w-[90vw] mx-auto">
-      <section class="flex flex-col [&>input]:border-rose-300 [&>input]:border-4  [&>label]:text-rose-300 text-rose-400 *:my-0.5 text-xl">
-        <label for="search-title">Search by title</label>
-        <input class="" type="text" name="search-title" id="search-title" />
+      <section class="flex flex-col text-xl *:rounded">
+        <form
+          onsubmit="handleSubmitTitleSearch(event)"
+          class="*:rounded flex flex-col [&>input]:p-2 [&>input]:border-rose-300 [&>input]:border-4 [&>label]:text-rose-300 text-rose-400 *:my-0.5"
+        >
+          <label for="search-title">Search by title</label>
+          <input class="" type="text" name="search-title" id="search-title" />
+          <button
+            class="border-2 p-2 hover:cursor-pointer hover:bg-inherit bg-rose-300 text-rose-50 hover:text-inherit"
+            type="submit"
+          >
+            Search
+          </button>
+        </form>
 
-        <label for="search-author">Search by author</label>
-        <input class="" type="text" name="search-author" id="search-author" />
+        <form
+          class="[&>input]:p-2 *:rounded flex flex-col [&>input]:border-rose-300 [&>input]:border-4 [&>label]:text-rose-300 text-rose-400 *:my-0.5"
+        >
+          <label for="search-author">Search by author</label>
+          <input class="" type="text" name="search-author" id="search-author" />
+          <button
+            class="border-2 p-2 hover:cursor-pointer hover:bg-inherit bg-rose-300 text-rose-50 hover:text-inherit"
+            type="submit"
+          >
+            Search
+          </button>
+        </form>
+      </section>
+
+      <section id="book-container">
+
       </section>
     </main>
     <footer></footer>
 
     <script src="app.js"></script>
-    <script src="tryCatchFinally.js"></script>
+    <!-- <script src="tryCatchFinally.js"></script> -->
   </body>
 </html>
