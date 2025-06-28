@@ -1,10 +1,15 @@
 const state = {
   currentPage: 1,
   currentTitle: "",
+  bookData: [],
+  isSortedAscending: true,
+  isRateLimit: false,
 };
 
 async function searchBookByTitle(title, page) {
   state.currentTitle = title;
+  state.isRateLimit = true;
+
   try {
     renderLoading();
     const response = await fetch(
@@ -15,6 +20,8 @@ async function searchBookByTitle(title, page) {
     }
 
     const data = await response.json();
+    state.bookData = data.docs;
+
     console.log(data);
     return data;
   } catch (error) {
@@ -29,7 +36,7 @@ function renderBooks(bookData) {
   booksContainer.innerHTML = "";
   booksContainer.className = "border-2 p-5 border-rose-300";
 
-  bookData.docs.forEach((book) => {
+  bookData.forEach((book) => {
     const bookElem = document.createElement("div");
     bookElem.className = "border-2 p-5 border-rose-300 text-rose-500 ";
 
@@ -62,7 +69,7 @@ function renderPagination(numFound) {
     state.currentPage--; // decrease the page number
     const data = await searchBookByTitle(state.currentTitle, state.currentPage);
 
-    renderBooks(data);
+    renderBooks(state.bookData);
     renderPagination(data.numFound);
   };
 
@@ -75,7 +82,7 @@ function renderPagination(numFound) {
     state.currentPage++; // increase the page number
     const data = await searchBookByTitle(state.currentTitle, state.currentPage);
 
-    renderBooks(data);
+    renderBooks(state.bookData);
     renderPagination(data.numFound);
   };
 
@@ -100,31 +107,56 @@ function renderLoading() {
   booksContainer.appendChild(loadingGif);
 }
 
+function renderSortButton() {
+  document.getElementById("sorting").innerHTML = "";
+  const sortButton = document.createElement("button");
+  sortButton.innerHTML = "Sort &#x21C5;";
+  sortButton.className =
+    "text-rose-500 border-1 border-rose-500 p-2 my-2 rounded-xl cursor-pointer";
+
+  sortButton.onclick = () => {
+    state.isSortedAscending = !state.isSortedAscending;
+
+    console.log(state.bookData);
+
+    state.bookData.sort((x, y) => {
+      if (state.isSortedAscending) {
+        if (x.title < y.title) return -1;
+        if (x.title > y.title) return 1;
+        return 0;
+      } else {
+        if (x.title < y.title) return 1;
+        if (x.title > y.title) return -1;
+        return 0;
+      }
+    });
+
+    renderBooks(state.bookData);
+    console.log(state.bookData);
+  };
+
+  document.getElementById("sorting").appendChild(sortButton);
+}
+
 async function handleSubmitTitleSearch(event) {
   event.preventDefault();
 
   const title = event.target["search-title"].value;
   console.log(title);
 
-  const data = await searchBookByTitle(title, state.currentPage);
+  if (state.isRateLimit === false) {
+    const data = await searchBookByTitle(title, state.currentPage);
+    // call our function to render the data
+    renderBooks(state.bookData);
 
-  // call our function to render the data
-  renderBooks(data);
+    // call our function to render pagination ui
+    renderPagination(data.numFound);
 
-  // call our function to render pagination ui
-  renderPagination(data.numFound);
+    renderSortButton();
+  } else {
+    alert("Calm down!! wait a couple seconds between requests dude.");
+    return;
+  }
 
-  renderSortButton()
-}
-
-function renderSortButton() {
-  const sortButton = document.createElement("button");
-  sortButton.innerHTML = "Sort &#x21C5;";
-  sortButton.className = "text-rose-500";
-
-  // sortButton.onClick = (data) => {
-  //   const docs = data.docs
-  // };
-
-  document.getElementById("sorting").appendChild(sortButton);
+  setTimeout(() => (state.isRateLimit = false), 2000);
 }
